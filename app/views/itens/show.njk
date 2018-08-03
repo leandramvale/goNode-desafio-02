@@ -1,0 +1,55 @@
+    <section id="main">
+      <div class="container">
+        <header>
+          <h2>{{ project.title }}</h2>
+          <div class="addon">
+            <form method="POST" action="/app/projects/{{ project.id }}?_method=DELETE">
+              <button type="submit" class="btn btn-danger">Excluir projeto</button>
+            </form>
+          </div>
+        </header>
+
+        <section id="content">
+          <nav>
+            <div class="sessions">
+              {% for item in itens %}
+                  <a href="/app/projects/{{ project.id }}/itens/{{ item.id }}" class="{% if item.id == activeItem %}active{% endif %}">
+                    {{ item.title }}
+                  </a>
+              {% endfor %}
+            </div>
+
+            <form action="/app/projects/{{ project.id }}/itens/create" method="POST">
+              <input type="text" name="title" placeholder="Título da sessão" />
+              <button type="submit" class="btn"><img src="/img/plus.svg"></button>
+            </form>
+          </nav>
+
+          <article>
+            <div class="project-header">
+              <h1>{{ activeItem.Title }}</h1>
+
+              <form method="POST" action="/app/projects/{{ project.id }}/itens/{{ activeItem.id }}?_method=DELETE">
+                <button type="submit" class="btn btn-danger">Remover seção</button>
+              </form>
+
+              <a href="#" data-modal-open="#edit-item">Editar seção</a>
+
+            </div>
+            <p>{{ activeItem.formattedContent | safe }}</p>
+          </article>
+        </section>
+      </div>
+    </section>
+
+      <div class="modal" id="edit-item">
+        <form class="modal-content" method="POST" action="/app/projects/{{ project.id }}/itens/{{ activeItem.id }}?_method=PUT">
+          <input type="text" name="title" placeholder="Título da Seção" value="{{ activeItem.title }}" />
+          <div class="content-container">
+            <textarea name="content" class="mde" placeholder="Conteúdo da sessão">{{ activeItem.content }}</textarea>
+          </div>
+          <button type="submit" class="btn">SALVAR SEÇÃO</button>
+          <a href="#" data-modal-close="#edit-item" class="btn btn-danger" >CANCELAR</a>
+        </form>
+      </div>
+
